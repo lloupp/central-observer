@@ -102,3 +102,36 @@ O gerenciador de estágios e os e-mails funcionam sem a instalação dessas bibl
 ## Solução: menus e botões sem resposta
 
 A versão anterior tinha um erro no seletor JavaScript do menu que interrompia a inicialização. Isso foi corrigido, junto com a compatibilidade entre HTML e JavaScript de diferentes versões. Se o painel continuar vazio, feche o terminal da Central, execute `git pull origin main` **na mesma pasta usada pelo `INICIAR.bat`**, reinicie e pressione **Ctrl + F5** no navegador. Confira a pasta correta antes de substituir arquivos. Preserve `data/observership.db` e todos os documentos locais.
+
+
+## Executar na rede local (servidor LAN) — piloto
+
+A unidade M: e armazenamento SMB, nao servidor web. Execute o programa em uma unica maquina ligada, com projeto e banco no disco local desse servidor (por exemplo, C:\CentralObserver). Outros computadores so usam o navegador; nao execute instancias concorrentes no banco compartilhado da unidade M:.
+
+1. Instale Python 3.10+ no servidor, clone o repositorio no disco local e instale as bibliotecas de certificados com INSTALAR_CERTIFICADOS.bat caso precise emitir Word.
+2. Feche a versao anterior antes de migrar o banco. Faca backup e copie a pasta data existente para C:\CentralObserver\data, preservando modelos. A pasta data nao esta publicada no GitHub.
+3. Com dados reais, solicite a TI um certificado HTTPS confiavel para o nome interno do servidor (certificado PEM e chave privada). O modo LAN exige HTTPS alem de senha forte.
+4. No PowerShell, dentro da pasta do projeto do servidor, execute:
+
+        .\INICIAR_REDE.ps1 -Porta 8765 -Certificado 'C:\certificados\central.crt' -Chave 'C:\certificados\central.key'
+
+5. Escolha senha com minimo de 16 caracteres. No navegador, o usuario sera central e a senha sera aquela fornecida ao iniciar o servico.
+6. Solicite a TI liberar TCP 8765 somente a sub-rede autorizada no perfil Domain, sem encaminhamento para internet. Exemplo ilustrativo (substituir pela sub-rede real):
+
+        New-NetFirewallRule -DisplayName 'Central Observer LAN' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8765 -Profile Domain -RemoteAddress '10.0.0.0/24'
+
+7. Nos computadores autorizados, acesse https://NOME-INTERNO-DO-SERVIDOR:8765. O nome deve constar no certificado e ser confiavel para os navegadores.
+
+### Teste de conectividade somente com dados ficticios
+
+Em rede isolada, sem dados reais, execute:
+
+        .\INICIAR_REDE.ps1 -TesteHttp
+
+Neste teste o acesso sera http://IP-DO-SERVIDOR:8765. Senha e dados trafegam **sem criptografia**. Nunca use esse modo com nomes, e-mails, planilhas ou certificados verdadeiros.
+
+### Limites do piloto
+
+O modo LAN inclui senha e HTTPS, mas nao e uma plataforma hospitalar pronta para producao: todos utilizam uma credencial compartilhada, nao ha permissoes individuais nem auditoria de quem alterou cada registro. Antes do uso institucional, a TI precisa avaliar autenticacao individual/SSO, perfis, PostgreSQL, backup com restauracao testada, monitoramento, seguranca de rede e LGPD. O Python http.server e voltado a usos leves; producao demanda infraestrutura endurecida.
+
+SQLite pode atender temporariamente varios navegadores na **mesma instancia do Python** se o arquivo ficar no disco local do servidor; nao compartilhe o arquivo ativo por SMB. Nao exponha a porta do aplicativo a internet.
