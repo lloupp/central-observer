@@ -95,7 +95,7 @@ async function generateCertificate(id){
     toast('Certificado Word gerado para conferência e assinatura. O envio não foi marcado.');
   }catch(e){toast(e.message)}
 }
-function init(){let d=new Date();$('#today').textContent=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});$('[data-view]').forEach(e=>e.addEventListener('click',()=>{
+function init(){let d=new Date();$('#today').textContent=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});document.querySelectorAll('[data-view]').forEach(e=>e.addEventListener('click',()=>{
     // Compatibilidade com o botão da versão antiga do HTML.
     if(e.dataset.view==='estagios' && e.classList.contains('link-button') && e.textContent.trim().startsWith('Ver todos')){showAllUpcoming();return}
     if(e.dataset.view==='estagios'){state.onlyUpcoming=false;if($('#period-filter'))$('#period-filter').value=''}
