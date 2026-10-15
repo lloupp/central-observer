@@ -16,3 +16,5 @@ jobs:
         run: node --check static/app.js
       - name: Testar proximos inicios no navegador
         run: node tests/test_upcoming.cjs
+      - name: Testar inicializacao do menu
+        run: node tests/test_menu_boot.cjs
