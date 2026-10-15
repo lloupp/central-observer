@@ -5,7 +5,7 @@ Aplicação local de gestão de estagiários observacionais, criada com base no 
 ## Como iniciar no Windows
 
 1. Extraia o arquivo ZIP em uma pasta de sua escolha.
-2. Execute `INICIAR.bat` com duplo clique (requer **Python 3.10 ou superior** instalado).
+2. Execute `INICIAR.bat` com duplo clique (requer **Python 3.10 ou superior** instalado). Para emitir certificados, execute `INSTALAR_CERTIFICADOS.bat` uma vez antes de iniciar.
 3. Abra `http://127.0.0.1:8765` no navegador, caso não abra automaticamente.
 4. Em **Importar Excel**, selecione a sua planilha `.xlsx`, confira os alertas e clique em **Confirmar importação**.
 
@@ -63,7 +63,7 @@ O comando usa apenas dados sintéticos de teste; não grava dados pessoais no re
 
 O código do gerador em `certificados/gerar_certificados_ensino.py` veio do gerador de **Observership, Residentes, Doutorandos e Mini Fellowship**, reutilizado na aplicação. A criação de certificados individuais mantém os textos por modalidade, tratamento de nomes/especialidades, datas e carga horária previstos naquele código. A Central **não lê, reescreve ou apaga** a planilha `CERTIFICADOS ENSINO.xlsx` do gerador anterior.
 
-1. No Windows, execute uma única vez `INSTALAR_CERTIFICADOS.bat` para instalar `docxtpl` e `openpyxl` no Python utilizado (é necessária conexão com a internet). No Linux, execute `python3 -m pip install -r requirements-certificados.txt`.
+1. No Windows, execute uma única vez `INSTALAR_CERTIFICADOS.bat`. O instalador cria automaticamente a pasta local `.venv` com `pip`, instala `docxtpl` e `openpyxl` nela e `INICIAR.bat` usa o mesmo ambiente (é necessária conexão com a internet). Assim, não depende do `pip` da instalação global do Python. No Linux, execute `python3 -m pip install -r requirements-certificados.txt` em seu ambiente Python.
 2. Abra a **Central**, clique em **Certificados** e carregue o **`Certificado modelo.docx` original** disponível no seu pacote anterior, na pasta `MODELOS`. É necessário carregar o modelo apenas uma vez por computador.
 3. Na ficha do estudante, informe **modalidade**, **carga horária comprovada no formulário**, as datas e confira o status de formulário recebido e crachá devolvido.
 4. Na tela **Certificados**, use **Gerar**. O Word ficará salvo na pasta privada `data/certificados/` e disponível para download. A situação muda para **Em emissão/assinatura**, sem marcar o documento como enviado.
@@ -82,3 +82,18 @@ python -m unittest discover -s tests -v
 O teste de geração completa com o modelo institucional requer `docxtpl` e o `.docx` disponibilizado localmente e, por isso, não executa esse caminho em CI pública com dados reais.
 
 **Formulário de conclusão:** abra **Modelos de e-mail** e carregue o arquivo Word `.doc` fornecido anteriormente. Assim, o modelo será anexado aos rascunhos de orientações sem ser enviado para o GitHub.
+
+## Solução de problemas no Windows — `No module named pip`
+
+Se o Python 3.14 (ou outra versão) mostrar `No module named pip`, **extraia a versão atualizada do aplicativo e rode `INSTALAR_CERTIFICADOS.bat` novamente**. O instalador novo cria um ambiente virtual `.venv`, que inclui o `pip` sem precisar alterar a instalação global. Os dados em `data/` não são alterados.
+
+Se a criação da `.venv` falhar, abra o **Prompt de Comando** e tente:
+
+```bat
+py -3 -m ensurepip --upgrade
+py -3 -m pip --version
+```
+
+Se `ensurepip` também estiver ausente, abra o instalador oficial do Python em **Modify** e habilite `pip` (e `venv`, se houver). Depois remova **somente** uma pasta `.venv` criada parcialmente, não remova `data/`, e execute novamente o instalador de certificados.
+
+O gerenciador de estágios e os e-mails funcionam sem a instalação dessas bibliotecas. Não execute os arquivos `.bat` diretamente dentro do ZIP: extraia todos os arquivos primeiro.
