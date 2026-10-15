@@ -16,6 +16,7 @@ No Linux/macOS: `python3 app.py` ou `./iniciar.sh`.
 ## Principais funcionalidades
 
 - Painel com totais, pendências operacionais, próximos inícios e cadastros recentes.
+- Em **Próximos inícios → Ver todos**, a listagem mostra apenas os estágios com início **hoje ou depois**, ordenados pela data mais próxima. O filtro **Todos os períodos** permite retornar à lista completa; os demais filtros e a busca continuam disponíveis.
 - Lista de estagiários com busca por nome, e-mail ou especialidade e filtro por etapa.
 - Ficha com aprovação, documentação, datas, hospital, crachá, formulário, certificado, telefone, observações, universidade e semestre.
 - Importação da planilha Excel atual, inclusive status existentes; **mostra prévia e alertas de datas antes de importar**.
