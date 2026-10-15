@@ -14,3 +14,5 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Verificar JavaScript
         run: node --check static/app.js
+      - name: Testar proximos inicios no navegador
+        run: node tests/test_upcoming.cjs
