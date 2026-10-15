@@ -98,3 +98,7 @@ py -3 -m pip --version
 Se `ensurepip` também estiver ausente, abra o instalador oficial do Python em **Modify** e habilite `pip` (e `venv`, se houver). Depois remova **somente** uma pasta `.venv` criada parcialmente, não remova `data/`, e execute novamente o instalador de certificados.
 
 O gerenciador de estágios e os e-mails funcionam sem a instalação dessas bibliotecas. Não execute os arquivos `.bat` diretamente dentro do ZIP: extraia todos os arquivos primeiro.
+
+## Solução: menus e botões sem resposta
+
+A versão anterior tinha um erro no seletor JavaScript do menu que interrompia a inicialização. Isso foi corrigido, junto com a compatibilidade entre HTML e JavaScript de diferentes versões. Se o painel continuar vazio, feche o terminal da Central, execute `git pull origin main` **na mesma pasta usada pelo `INICIAR.bat`**, reinicie e pressione **Ctrl + F5** no navegador. Confira a pasta correta antes de substituir arquivos. Preserve `data/observership.db` e todos os documentos locais.
